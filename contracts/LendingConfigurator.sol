@@ -21,8 +21,8 @@ contract LendingConfigurator is AccessControl {
      * @param _lendingPool The address of the LendingPool contract
      */
     constructor(address _lendingPool) {
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(ADMIN_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, msg.sender);
         lendingPool = LendingPool(_lendingPool);
     }
 
@@ -38,20 +38,22 @@ contract LendingConfigurator is AccessControl {
         address debtToken
     ) external onlyRole(ADMIN_ROLE) {
         // Initialize reserve with given LToken and DebtToken
-        lendingPool.reserves(asset).lToken = LToken(lToken);
-        lendingPool.reserves(asset).debtToken = DebtToken(debtToken);
+        // lendingPool.reserves(asset).lToken = LToken(lToken);
+        // lendingPool.reserves(asset).debtToken = DebtToken(debtToken);
+        lendingPool.initReserve(asset, lToken, debtToken);
     }
 
     /**
      * @dev Updates the LToken contract address for an existing reserve
      * @param asset The ERC20 asset whose LToken is being updated
      * @param newLToken The address of the new LToken contract
+     * @notice this function will be called first then in LendingPool
      */
-    function updateLToken(address asset, address newLToken) external onlyRole(ADMIN_ROLE) {
-        require(address(lendingPool.reserves(asset).lToken) != address(0), "Reserve not initialized");
-
-        // Replace only the LToken address, preserving all other data
-        lendingPool.reserves(asset).lToken = LToken(newLToken);
+    function configureReserveLToken(
+        address asset,
+        address newLToken
+    ) external onlyRole(ADMIN_ROLE) {
+        lendingPool.setReserveLToken(asset, newLToken);
     }
 
     /**
@@ -59,10 +61,10 @@ contract LendingConfigurator is AccessControl {
      * @param asset The ERC20 asset whose DebtToken is being updated
      * @param newDebtToken The address of the new DebtToken contract
      */
-    function updateDebtToken(address asset, address newDebtToken) external onlyRole(ADMIN_ROLE) {
-        require(address(lendingPool.reserves(asset).debtToken) != address(0), "Reserve not initialized");
-
-        // Replace only the DebtToken address, preserving all other data
-        lendingPool.reserves(asset).debtToken = DebtToken(newDebtToken);
+    function configureReserveDebtToken(
+        address asset,
+        address newDebtToken
+    ) external onlyRole(ADMIN_ROLE) {
+        lendingPool.setReserveDebtToken(asset, newDebtToken);
     }
 }

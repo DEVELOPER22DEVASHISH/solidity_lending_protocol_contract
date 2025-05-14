@@ -15,6 +15,7 @@ import "@openzeppelin/contracts/access/Ownable.sol"; // Use Ownable for ownershi
  */
 
 contract PriceOracle is Ownable {
+     constructor() Ownable(msg.sender) {}
     mapping(address => uint256) public prices; // asset => price in USD (1e8)
 
     // Event to log price updates

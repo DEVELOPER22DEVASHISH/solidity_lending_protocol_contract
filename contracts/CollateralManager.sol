@@ -88,3 +88,63 @@ contract CollateralManager {
         return debtValue > (collateralValue * config.liquidationThreshold) / 1e18;
     }
 }
+
+
+/*
+    // === Per-User Risk Configuration (Future Extension) ===
+    // In the future,  can allow custom risk parameters (LTV, liquidation threshold, etc.)
+    // for specific users (e.g., VIPs, partners) by adding this mapping and logic:
+
+    // mapping(address => ReserveConfiguration.Config) public userRiskConfig;
+
+    // function setUserRiskConfig(address user, ReserveConfiguration.Config calldata config) external onlyRole(ADMIN_ROLE) {
+    //     userRiskConfig[user] = config;
+    // }
+
+    // function _getConfig(address user, address asset) internal view returns (ReserveConfiguration.Config memory) {
+    //     ReserveConfiguration.Config memory config = userRiskConfig[user];
+    //     if (config.isActive) {
+    //         return config;
+    //     }
+    //     return reserveConfig.getConfig(asset);
+    // }
+
+    // In isHealthy/isLiquidatable, replace:
+    // ReserveConfiguration.Config memory config = reserveConfig.getConfig(collateralAsset);
+    // with:
+    // ReserveConfiguration.Config memory config = _getConfig(user, collateralAsset);
+*/
+
+
+/*
+    // === Blacklist/Whitelist (Future Extension) ===
+    // To restrict protocol access for certain users, add these mappings and checks:
+
+    // mapping(address => bool) public isBlacklisted;
+    // mapping(address => bool) public isWhitelisted;
+
+    // function setBlacklist(address user, bool value) external onlyRole(ADMIN_ROLE) {
+    //     isBlacklisted[user] = value;
+    // }
+    // function setWhitelist(address user, bool value) external onlyRole(ADMIN_ROLE) {
+    //     isWhitelisted[user] = value;
+    // }
+
+    // In isHealthy/isLiquidatable, add:
+    // require(!isBlacklisted[user], "User is blacklisted");
+    // // Optionally: require(isWhitelisted[user], "User not whitelisted");
+*/
+
+
+/*
+    // === User-Specific Collateral/Debt Tracking (Future Extension) ===
+    // To track collateral and debt per user, need to add these mappings:
+
+    // mapping(address => mapping(address => uint256)) public userCollateral; // user => asset => amount
+    // mapping(address => mapping(address => uint256)) public userDebt;       // user => asset => amount
+
+    // Update these mappings in your deposit/borrow/repay/withdraw logic.
+    // Then, in isHealthy/isLiquidatable,  can fetch:
+    // uint256 collateralAmount = userCollateral[user][collateralAsset];
+    // uint256 debtAmount = userDebt[user][debtAsset];
+*/

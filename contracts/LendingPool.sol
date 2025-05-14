@@ -3,8 +3,8 @@ pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
 import "./LToken.sol";
 import "./DebtToken.sol";
@@ -220,10 +220,7 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
         uint256 utilization = reserve.totalBorrows.calculateUtilization(
             reserve.totalDeposits
         );
-        uint256 ratePerSecond = interestModel.getInterestRate(
-            asset,
-            utilization
-        );
+        uint256 ratePerSecond = interestModel.getBorrowRate(utilization);
         uint256 interest = (reserve.totalBorrows * ratePerSecond * timeDiff) /
             1e18;
 
@@ -237,5 +234,41 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
 
     function unpause() external onlyRole(ADMIN_ROLE) {
         _unpause();
+    }
+
+    // optional for atomic update to both at a time for during migration and protocol upgrade
+    function setReserveTokens(
+        address asset,
+        address lToken,
+        address debtToken
+    ) external onlyRole(ADMIN_ROLE) {
+        if (!reserves[asset].isInitialized) {
+            revert Errors.ReserveNotInitialized();
+        }
+
+        reserves[asset].lToken = LToken(lToken);
+        reserves[asset].debtToken = DebtToken(debtToken);
+    }
+
+    function setReserveLToken(
+        address asset,
+        address newLToken
+    ) external onlyRole(ADMIN_ROLE) {
+        if (!reserves[asset].isInitialized) {
+            revert Errors.ReserveNotInitialized();
+        }
+
+        reserves[asset].lToken = LToken(newLToken);
+    }
+
+    function setReserveDebtToken(
+        address asset,
+        address newDebtToken
+    ) external onlyRole(ADMIN_ROLE) {
+        if (!reserves[asset].isInitialized) {
+            revert Errors.ReserveNotInitialized();
+        }
+
+        reserves[asset].debtToken = DebtToken(newDebtToken);
     }
 }
