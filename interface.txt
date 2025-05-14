@@ -1,0 +1,73 @@
+future implementation for interface
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+interface IDebtToken {
+    // LendingPool operations
+    function mint(address to, uint256 amount) external;
+    function burn(address from, uint256 amount) external;
+
+    // Optional ERC-20 functionality
+    function balanceOf(address account) external view returns (uint256);
+    function totalSupply() external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+
+    // Metadata
+    function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
+    function decimals() external view returns (uint8);
+}
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+interface ILendingPool {
+    function deposit(address asset, uint256 amount) external;
+    function withdraw(address asset, uint256 amount) external;
+    function borrow(
+        address asset,
+        uint256 amount,
+        address collateralAsset,
+        uint256 collateralAmount
+    ) external;
+    function repay(address asset, uint256 amount) external;
+}
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+interface ILToken {
+    // Core LendingPool operations
+    function mint(address to, uint256 amount) external;
+    function burn(address from, uint256 amount) external;
+
+    // Optional ERC-20 functionality
+    function balanceOf(address account) external view returns (uint256);
+    function totalSupply() external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+
+    // Metadata
+    function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
+    function decimals() external view returns (uint8);
+}
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+interface IPriceOracle {
+    function getPrice(address asset) external view returns (uint256);
+
+    // ⚠️ ONLY for development/testing. Remove for production deployment.
+    function setPrice(address asset, uint256 price) external;
+}
