@@ -1,0 +1,14 @@
+{
+  "LTokenModule#LToken": "0xB45f640bCe3C0366e67aa3bE6F3742F7353Fc85C",
+  "DebtTokenModule#DebtToken": "0xCAEF2b544aF3dDE697fB38267a40BB31CFF3F958",
+  "InterestRateModelModule#InterestRateModel": "0xF04FE514547128C320e4f6fFB614824291962D81",
+  "QBDTokenModule#QBDToken": "0x810d670a3B2151bdC5603f15f5fa556167f41eB4",
+  "ReserveConfigurationModule#ReserveConfiguration": "0x2B8BbB6680853f54C0aB4185F424c1BF65e13473",
+  "CollateralManagerModule#PriceOracle": "0x5f44d91b9d56531d2dcb4E280b00adB4c0B4087D",
+  "CollateralManagerModule#ReserveConfiguration": "0xB497F496D41011DeB2ddD84B39096C2B93C68A8F",
+  "CollateralManagerModule#CollateralManager": "0xe56d308A5d6618200895423327E5EC2eC8e84477",
+  "PriceOracleModule#PriceOracle": "0x5F11F16E0C8ed9a469F8acEA61196c68AF19DfBD",
+  "CollateralManagerModuleV2#CollateralManager": "0x993FC5F172280dCE3f9EF1622dF21718cc76835f",
+  "LendingPoolModule#LendingPool": "0x2846b408cF34154b4207A4c944701f1bdCA9DCC9",
+  "LendingConfiguratorModule#LendingConfigurator": "0x1eA5c40815d2422dD123b0a29C9391d050Cc8f71"
+}
