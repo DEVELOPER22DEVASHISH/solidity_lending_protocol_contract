@@ -42,8 +42,8 @@ contract PriceOracle is Ownable {
      * @param asset The ERC20 token address (e.g., USDC)
      * @return price The latest price from Chainlink (1e8 decimals)
      */
-  
-     function getPrice(address asset) external view returns (uint256 price) {
+
+    function getPrice(address asset) external view returns (uint256 price) {
         address aggregator = aggregators[asset];
         require(aggregator != address(0), "Aggregator not set");
 
@@ -62,6 +62,7 @@ contract PriceOracle is Ownable {
         uint8 decimals = priceFeed.decimals();
         // Normalize to 18 decimals
         price = uint256(answer) * (10 ** (18 - decimals));
+        return price;
     }
 
     /**
@@ -73,7 +74,8 @@ contract PriceOracle is Ownable {
         address aggregator = aggregators[asset];
         require(aggregator != address(0), "Aggregator not set");
 
-        (, int256 answer, , , ) = AggregatorV3Interface(aggregator).latestRoundData();
+        (, int256 answer, , , ) = AggregatorV3Interface(aggregator)
+            .latestRoundData();
         require(answer > 0, "Invalid price");
 
         return answer;
@@ -84,7 +86,9 @@ contract PriceOracle is Ownable {
      * @param asset ERC20 token address
      * @return decimals Number of decimals used in price feed
      */
-    function getAggregatorDecimals(address asset) external view returns (uint8) {
+    function getAggregatorDecimals(
+        address asset
+    ) external view returns (uint8) {
         address aggregator = aggregators[asset];
         require(aggregator != address(0), "Aggregator not set");
 
@@ -99,33 +103,32 @@ contract PriceOracle is Ownable {
     function getAggregator(address asset) external view returns (address) {
         return aggregators[asset];
     }
-    }
+}
 
-    // ----for manual price setting----
-    //  constructor() Ownable(msg.sender) {}
-    // mapping(address => uint256) public prices; // asset => price in USD (1e8)
+// ----for manual price setting----
+//  constructor() Ownable(msg.sender) {}
+// mapping(address => uint256) public prices; // asset => price in USD (1e8)
 
-    // // Event to log price updates
-    // event PriceUpdated(address indexed asset, uint256 newPrice);
+// // Event to log price updates
+// event PriceUpdated(address indexed asset, uint256 newPrice);
 
-    // // Set price for an asset, only callable by the owner
-    // function setPrice(address asset, uint256 price) external onlyOwner {
-    //     require(price > 0, "Price must be greater than zero");
-    //     prices[asset] = price;
+// // Set price for an asset, only callable by the owner
+// function setPrice(address asset, uint256 price) external onlyOwner {
+//     require(price > 0, "Price must be greater than zero");
+//     prices[asset] = price;
 
-    //     emit PriceUpdated(asset, price); // Emit event on price update
-    // }
+//     emit PriceUpdated(asset, price); // Emit event on price update
+// }
 
-    // // Get the price of an asset
-    // function getPrice(address asset) external view returns (uint256) {
-    //     return prices[asset];
-    // }
+// // Get the price of an asset
+// function getPrice(address asset) external view returns (uint256) {
+//     return prices[asset];
+// }
 
-      // function getPrice(address asset) external view returns (uint256 price) {
-    //     address aggregator = aggregators[asset];
-    //     require(aggregator != address(0), "Aggregator not set");
-    //     (, int256 answer, , , ) = AggregatorV3Interface(aggregator)
-    //         .latestRoundData();
-    //     require(answer > 0, "Invalid price");
-    //     price = uint256(answer);
-
+// function getPrice(address asset) external view returns (uint256 price) {
+//     address aggregator = aggregators[asset];
+//     require(aggregator != address(0), "Aggregator not set");
+//     (, int256 answer, , , ) = AggregatorV3Interface(aggregator)
+//         .latestRoundData();
+//     require(answer > 0, "Invalid price");
+//     price = uint256(answer);

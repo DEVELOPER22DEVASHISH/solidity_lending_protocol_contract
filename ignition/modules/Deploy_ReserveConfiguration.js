@@ -1,8 +1,8 @@
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
 module.exports = buildModule("ReserveConfigurationModule", (m) => {
-  const debtToken = m.contract("ReserveConfiguration"); 
-  return { debtToken };
+  const reserveConfig = m.contract("ReserveConfiguration"); 
+  return { reserveConfig };
 });
 
 // npx hardhat ignition deploy ./ignition/modules/Deploy_ReserveConfiguration.js --network polygonAmoy

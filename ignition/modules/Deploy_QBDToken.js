@@ -2,8 +2,8 @@
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
 module.exports = buildModule("QBDTokenModule", (m) => {
-  const debtToken = m.contract("QBDToken"); 
-  return { debtToken };
+  const QBDToken = m.contract("QBDToken"); 
+  return { QBDToken };
 });
 // npx hardhat ignition deploy ./ignition/modules/Deploy_QBDToken.js --network polygonAmoy
 

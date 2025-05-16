@@ -10,5 +10,13 @@
   "PriceOracleModule#PriceOracle": "0x5F11F16E0C8ed9a469F8acEA61196c68AF19DfBD",
   "CollateralManagerModuleV2#CollateralManager": "0x993FC5F172280dCE3f9EF1622dF21718cc76835f",
   "LendingPoolModule#LendingPool": "0x2846b408cF34154b4207A4c944701f1bdCA9DCC9",
-  "LendingConfiguratorModule#LendingConfigurator": "0x1eA5c40815d2422dD123b0a29C9391d050Cc8f71"
+  "LendingConfiguratorModule#LendingConfigurator": "0x1eA5c40815d2422dD123b0a29C9391d050Cc8f71",
+  "PriceOracleModuleV1#PriceOracle": "0x74F3EEB43C7Ca2537F3d3A6D59fBfD310fc78022",
+  "CollateralManagerModuleV3#CollateralManager": "0x38cB19Cd078FA6f72D8A0435Da6cEd6D65b06ce7",
+  "LendingPoolModuleV1#LendingPool": "0x460353c401F1699AbA385021933BA4bad469aC07",
+  "LendingConfiguratorModuleV1#LendingConfigurator": "0xe2076d36e7c25E0766B66c89f26f263215e3C8D8",
+  "PriceOracleModuleV2#PriceOracle": "0xd12bC116F032dc7fe68cfa70b24A98A508dd308F",
+  "CollateralManagerModuleV4#CollateralManager": "0x6899d1a6f9F18dfFe9E623Ad46b47620143a3dBb",
+  "LendingPoolModuleV2#LendingPool": "0xBBbD25711460Af780A38EBc278BAA1df6d33fca3",
+  "LendingConfiguratorModuleV2#LendingConfigurator": "0x3b60b887A44bdb0471F5fd72dE7AE76638eC667A"
 }

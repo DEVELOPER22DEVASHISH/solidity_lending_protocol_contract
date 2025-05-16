@@ -1,8 +1,8 @@
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
-module.exports = buildModule("CollateralManagerModuleV2", (m) => {
+module.exports = buildModule("CollateralManagerModuleV4", (m) => {
   const RESERVE_CONFIG_ADDRESS = "0x2B8BbB6680853f54C0aB4185F424c1BF65e13473";
-  const PRICE_ORACLE_ADDRESS   = "0x5F11F16E0C8ed9a469F8acEA61196c68AF19DfBD";
+  const PRICE_ORACLE_ADDRESS   = "0xd12bC116F032dc7fe68cfa70b24A98A508dd308F";
   const collateralManager = m.contract("CollateralManager", [
     RESERVE_CONFIG_ADDRESS,
     PRICE_ORACLE_ADDRESS
@@ -36,4 +36,3 @@ module.exports = buildModule("CollateralManagerModuleV2", (m) => {
 
 // npx hardhat ignition deploy ./ignition/modules/Deploy_CollateralManager.js --network polygonAmoy
 
-// CollateralManagerModuleV2#CollateralManager - 0x993FC5F172280dCE3f9EF1622dF21718cc76835f
