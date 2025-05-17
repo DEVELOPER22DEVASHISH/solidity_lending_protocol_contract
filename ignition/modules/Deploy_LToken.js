@@ -10,6 +10,3 @@ module.exports = buildModule("LTokenModule", (m) => {
 })
 // npx hardhat ignition deploy ./ignition/modules/Deploy_LToken.js --network polygonAmoy
 
-// Deployed Address
-
-// LTokenModule#LToken - 0xB45f640bCe3C0366e67aa3bE6F3742F7353Fc85C

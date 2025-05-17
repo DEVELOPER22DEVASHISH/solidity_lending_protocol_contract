@@ -108,7 +108,6 @@ async function main() {
   await getRawPrice("DAI");
   await getPrice("DAI");
 
-  // Repeat for ETH, MATIC, etc. as needed
 }
 
 main().catch((error) => {
