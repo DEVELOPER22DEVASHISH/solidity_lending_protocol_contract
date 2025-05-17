@@ -2,17 +2,15 @@ const { ethers } = require("hardhat");
 
 const priceOracleAddress = "0xd12bC116F032dc7fe68cfa70b24A98A508dd308F";
 const assets = {
-  USDC: "0xYourUSDCAddress",
-  DAI: "0xYourDAIAddress",
-  ETH: "0xYourWETHAddress",
-  MATIC: "0xYourWMATICAddress",
+  USDC: "0x3434891fD32583E9BD2fA82A6f02aFa791d2710D",
+  DAI: "0xD7b22F1e8705dA9019eb571B17eBCeeC8Df4f933",
+  USDT: "0x0295EaA0A2477C5a073279f21CD1E4D843b89512",
 };
 
 const aggregators = {
   USDC: "0x1b8739bB4CdF0089d07097A9Ae5Bd274b29C6F16",
   DAI: "0x1896522f28bF5912dbA483AC38D7eE4c920fDB6E",
-  ETH: "0xF0d50568e3A7e8259E16663972b11910F89BD8e7",
-  MATIC: "0x001382149eBa3441043c1c66972b4772963f5D43",
+  USDT: "0xF0d50568e3A7e8259E16663972b11910F89BD8e7",
 };
 
 let priceOracle;
@@ -114,3 +112,5 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+
+// npx hardhat run scripts/setPriceOracle.js --network polygonAmoy

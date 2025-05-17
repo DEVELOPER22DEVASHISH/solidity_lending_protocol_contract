@@ -7,4 +7,3 @@ module.exports = buildModule("DebtTokenModule", (m) => {
 });
 // npx hardhat ignition deploy ./ignition/modules/Deploy_DebtToken.js --network polygonAmoy
 
-// DebtTokenModule#DebtToken - 0xCAEF2b544aF3dDE697fB38267a40BB31CFF3F958
