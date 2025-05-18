@@ -1,4 +1,5 @@
 const { ethers } = require("hardhat");
+const { parseUnits, formatUnits } = ethers;
 
 // ====== CONFIGURATION ======
 const reserveConfigAddress = "0x2B8BbB6680853f54C0aB4185F424c1BF65e13473"; 
@@ -32,9 +33,9 @@ const reserves = [
 ];
 
 async function setReserveConfig(reserve, contract) {
-  const ltv = ethers.utils.parseUnits(reserve.ltv, 18);
-  const liquidationThreshold = ethers.utils.parseUnits(reserve.liquidationThreshold, 18);
-  const liquidationBonus = ethers.utils.parseUnits(reserve.liquidationBonus, 18);
+  const ltv = parseUnits(reserve.ltv, 18);
+  const liquidationThreshold = parseUnits(reserve.liquidationThreshold, 18);
+  const liquidationBonus = parseUnits(reserve.liquidationBonus, 18);
 
   try {
     const tx = await contract.setConfig(
@@ -65,9 +66,9 @@ async function main() {
     // Optional: Fetch and display the config for verification
     try {
       const config = await reserveConfig.getConfig(reserve.asset);
-      console.log(`   LTV: ${ethers.utils.formatUnits(config.ltv, 18)}`);
-      console.log(`   Liquidation Threshold: ${ethers.utils.formatUnits(config.liquidationThreshold, 18)}`);
-      console.log(`   Liquidation Bonus: ${ethers.utils.formatUnits(config.liquidationBonus, 18)}`);
+      console.log(`   LTV: ${formatUnits(config.ltv, 18)}`);
+      console.log(`   Liquidation Threshold: ${formatUnits(config.liquidationThreshold, 18)}`);
+      console.log(`   Liquidation Bonus: ${formatUnits(config.liquidationBonus, 18)}`);
       console.log(`   Active: ${config.isActive}\n`);
     } catch (err) {
       console.error(`   ❌ Error fetching config for ${reserve.symbol}:`, err.reason || err.message);
