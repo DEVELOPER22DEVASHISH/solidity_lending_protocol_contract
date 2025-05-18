@@ -1,11 +1,10 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-//   your deployed contract addresses
+
   const lToken = await ethers.getContractAt("LToken", "0xB45f640bCe3C0366e67aa3bE6F3742F7353Fc85C", /* signer */);
   const debtToken = await ethers.getContractAt("DebtToken", "0xCAEF2b544aF3dDE697fB38267a40BB31CFF3F958", /* signer */);
 
-  // Replace with the address you want to check (your own address)
   const addressToCheck = "0x669be6E4FfcF41D8Db587Bd56035Ae8E541ed12D";
 
   const ADMIN_ROLE = ethers.keccak256(ethers.toUtf8Bytes("ADMIN_ROLE"));

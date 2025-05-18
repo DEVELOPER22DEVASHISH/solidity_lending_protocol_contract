@@ -4,7 +4,6 @@ async function main() {
   const [admin] = await ethers.getSigners();
   const adminAddress = admin.address;
 
-  // Replace these addresses with your deployed contract addresses
   const lToken = await ethers.getContractAt("LToken", "0xB45f640bCe3C0366e67aa3bE6F3742F7353Fc85C", admin);
   const debtToken = await ethers.getContractAt("DebtToken", "0xCAEF2b544aF3dDE697fB38267a40BB31CFF3F958", admin);
   const lendingPool = await ethers.getContractAt("LendingPool", "0xBBbD25711460Af780A38EBc278BAA1df6d33fca3", admin);
