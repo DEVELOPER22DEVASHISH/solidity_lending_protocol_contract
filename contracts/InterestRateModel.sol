@@ -5,10 +5,10 @@ pragma solidity ^0.8.28;
  * @title InterestRateModel
  * @dev This contract defines a dynamic interest rate model for borrowings in a lending protocol.
  * It calculates interest rates based on asset utilization to incentivize balanced lending and borrowing:
- * 
+ *
  * - When utilization is low, the interest rate increases slowly (slope1).
  * - When utilization exceeds a threshold (optimalUtilization), the rate increases steeply (slope2).
- * 
+ *
  * This helps ensure:
  * - High capital efficiency
  * - Protection from liquidity risks
@@ -32,13 +32,17 @@ contract InterestRateModel {
      * @param utilization The utilization ratio (in 1e18 scale, e.g., 75% = 0.75e18)
      * @return The borrow interest rate (in 1e18 scale, e.g., 0.05e18 = 5%)
      */
-    function getBorrowRate(uint256 utilization) external view returns (uint256) {
+    function getBorrowRate(
+        uint256 utilization
+    ) external view returns (uint256) {
         if (utilization <= optimalUtilization) {
             // Below optimal, use baseRate + slope1 * utilization
             return baseRate + (utilization * slope1) / 1e18;
         } else {
             // Above optimal, use slope2 for excess utilization
-            uint256 normalRate = baseRate + (optimalUtilization * slope1) / 1e18;
+            uint256 normalRate = baseRate +
+                (optimalUtilization * slope1) /
+                1e18;
             uint256 excessUtil = utilization - optimalUtilization;
             return normalRate + (excessUtil * slope2) / 1e18;
         }

@@ -3,12 +3,11 @@ pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./LendingPool.sol";
-import "./LToken.sol";
-import "./DebtToken.sol";
 
 /**
  * @title LendingConfigurator
  * @dev Admin contract to manage reserve configuration for the LendingPool
+ *      Uses only addresses for LToken and DebtToken (interface-based, asset-specific)
  */
 contract LendingConfigurator is AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
@@ -37,17 +36,13 @@ contract LendingConfigurator is AccessControl {
         address lToken,
         address debtToken
     ) external onlyRole(ADMIN_ROLE) {
-        // Initialize reserve with given LToken and DebtToken
-        // lendingPool.reserves(asset).lToken = LToken(lToken);
-        // lendingPool.reserves(asset).debtToken = DebtToken(debtToken);
         lendingPool.initReserve(asset, lToken, debtToken);
     }
 
     /**
-     * @dev Updates the LToken contract address for an existing reserve
+     * @dev Updates the LToken contract address for an existing reserve.
      * @param asset The ERC20 asset whose LToken is being updated
      * @param newLToken The address of the new LToken contract
-     * @notice this function will be called first then in LendingPool
      */
     function configureReserveLToken(
         address asset,
@@ -57,7 +52,7 @@ contract LendingConfigurator is AccessControl {
     }
 
     /**
-     * @dev Updates the DebtToken contract address for an existing reserve
+     * @dev Updates the DebtToken contract address for an existing reserve.
      * @param asset The ERC20 asset whose DebtToken is being updated
      * @param newDebtToken The address of the new DebtToken contract
      */

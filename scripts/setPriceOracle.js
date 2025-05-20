@@ -1,10 +1,10 @@
 const { ethers, formatUnits } = require("hardhat");
 
-const priceOracleAddress = "0xd12bC116F032dc7fe68cfa70b24A98A508dd308F";
+const priceOracleAddress = "0x7E0FA3924dcd8F7bF4730d32F867546d9D840158";
 const assets = {
-  USDC: "0x3434891fD32583E9BD2fA82A6f02aFa791d2710D",
-  DAI: "0xD7b22F1e8705dA9019eb571B17eBCeeC8Df4f933",
-  USDT: "0x0295EaA0A2477C5a073279f21CD1E4D843b89512",
+  USDC: "0x0207e57106Bc422e97eA7B225a62c147b6304671",
+  DAI: "0xcf2A8631d4f14eB01e73813D4a7dB6238318ABE6",
+  USDT: "0x4813a8fB4309853b8df25c74A59cea6Ebef42a1E",
 };
 
 const aggregators = {

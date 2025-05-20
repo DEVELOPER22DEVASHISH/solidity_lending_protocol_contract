@@ -2,12 +2,12 @@ const { ethers } = require("hardhat");
 const { parseUnits, formatUnits } = ethers;
 
 // ====== CONFIGURATION ======
-const reserveConfigAddress = "0x2B8BbB6680853f54C0aB4185F424c1BF65e13473"; 
+const reserveConfigAddress = "0xA6a5c6865fd7f34f8066695203201418c66751E6"; 
 
 const reserves = [
   {
     symbol: "USDC",
-    asset: "0x3434891fD32583E9BD2fA82A6f02aFa791d2710D",
+    asset: "0x0207e57106Bc422e97eA7B225a62c147b6304671",
     ltv: "0.75",                  // 75%
     liquidationThreshold: "0.80", // 80%
     liquidationBonus: "1.05",     // 105% (5% bonus)
@@ -15,7 +15,7 @@ const reserves = [
   },
   {
     symbol: "DAI",
-    asset: "0xD7b22F1e8705dA9019eb571B17eBCeeC8Df4f933",
+    asset: "0xcf2A8631d4f14eB01e73813D4a7dB6238318ABE6",
     ltv: "0.80",
     liquidationThreshold: "0.85",
     liquidationBonus: "1.08",
@@ -23,7 +23,7 @@ const reserves = [
   },
    {
     symbol: "USDT",
-    asset: "0x0295EaA0A2477C5a073279f21CD1E4D843b89512",
+    asset: "0x4813a8fB4309853b8df25c74A59cea6Ebef42a1E",
     ltv: "0.80",
     liquidationThreshold: "0.85",
     liquidationBonus: "1.08",

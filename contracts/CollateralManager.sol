@@ -44,7 +44,9 @@ contract CollateralManager {
         require(collateralPrice > 0 && debtPrice > 0, "Invalid oracle price");
 
         // Load config for collateral asset
-        ReserveConfiguration.Config memory config = reserveConfig.getConfig(collateralAsset);
+        ReserveConfiguration.Config memory config = reserveConfig.getConfig(
+            collateralAsset
+        );
         require(config.isActive, "Collateral asset not active");
 
         // Compute values in USD (1e18 scale)
@@ -77,7 +79,9 @@ contract CollateralManager {
         require(collateralPrice > 0 && debtPrice > 0, "Invalid oracle price");
 
         // Load config for collateral asset
-        ReserveConfiguration.Config memory config = reserveConfig.getConfig(collateralAsset);
+        ReserveConfiguration.Config memory config = reserveConfig.getConfig(
+            collateralAsset
+        );
         require(config.isActive, "Collateral asset not active");
 
         // Compute values in USD (1e18 scale)
@@ -85,10 +89,10 @@ contract CollateralManager {
         uint256 debtValue = (debtAmount * debtPrice) / 1e18;
 
         // Evaluate whether the debt exceeds the liquidation threshold
-        return debtValue > (collateralValue * config.liquidationThreshold) / 1e18;
+        return
+            debtValue > (collateralValue * config.liquidationThreshold) / 1e18;
     }
 }
-
 
 /*
     // === Per-User Risk Configuration (Future Extension) ===
@@ -115,7 +119,6 @@ contract CollateralManager {
     // ReserveConfiguration.Config memory config = _getConfig(user, collateralAsset);
 */
 
-
 /*
     // === Blacklist/Whitelist (Future Extension) ===
     // To restrict protocol access for certain users, add these mappings and checks:
@@ -134,7 +137,6 @@ contract CollateralManager {
     // require(!isBlacklisted[user], "User is blacklisted");
     // // Optionally: require(isWhitelisted[user], "User not whitelisted");
 */
-
 
 /*
     // === User-Specific Collateral/Debt Tracking (Future Extension) ===

@@ -5,14 +5,25 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
-
-import "./LToken.sol";
-import "./DebtToken.sol";
 import "./InterestRateModel.sol";
 import "./CollateralManager.sol";
 import "./LendingLogic.sol";
 import "./ReserveConfiguration.sol";
 import "./Errors.sol";
+
+// interfaces for asset-specific LToken and DebtToken
+
+interface ILToken {
+    function mint(address to, uint256 amount) external;
+
+    function burn(address from, uint256 amount) external;
+}
+
+interface IDebtToken {
+    function mint(address to, uint256 amount) external;
+
+    function burn(address from, uint256 amount) external;
+}
 
 contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
     using LendingLogic for uint256;
@@ -21,8 +32,8 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
     bytes32 public constant LIQUIDATOR_ROLE = keccak256("LIQUIDATOR_ROLE");
 
     struct ReserveData {
-        LToken lToken;
-        DebtToken debtToken;
+        address lToken;
+        address debtToken;
         uint256 totalDeposits;
         uint256 totalBorrows;
         uint256 lastUpdateTimestamp;
@@ -54,6 +65,7 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
         address _reserveConfig
     ) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, msg.sender);
         interestModel = InterestRateModel(_interestModel);
         collateralManager = CollateralManager(_collateralManager);
         reserveConfig = ReserveConfiguration(_reserveConfig);
@@ -75,8 +87,8 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
             revert Errors.ReserveAlreadyInitialized();
         }
         reserves[asset] = ReserveData({
-            lToken: LToken(lToken),
-            debtToken: DebtToken(debtToken),
+            lToken: lToken,
+            debtToken: debtToken,
             totalDeposits: 0,
             totalBorrows: 0,
             lastUpdateTimestamp: block.timestamp,
@@ -95,7 +107,7 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
         _accrueInterest(asset);
 
         IERC20(asset).transferFrom(msg.sender, address(this), amount);
-        reserves[asset].lToken.mint(msg.sender, amount);
+        ILToken(reserves[asset].lToken).mint(msg.sender, amount);
         reserves[asset].totalDeposits += amount;
 
         emit Deposit(msg.sender, asset, amount);
@@ -107,7 +119,7 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
     ) external nonReentrant whenNotPaused onlyInitialized(asset) {
         _accrueInterest(asset);
 
-        reserves[asset].lToken.burn(msg.sender, amount);
+        ILToken(reserves[asset].lToken).burn(msg.sender, amount);
         reserves[asset].totalDeposits -= amount;
 
         IERC20(asset).transfer(msg.sender, amount);
@@ -138,7 +150,7 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
 
         _accrueInterest(asset);
 
-        reserves[asset].debtToken.mint(msg.sender, amount);
+        IDebtToken(reserves[asset].debtToken).mint(msg.sender, amount);
         reserves[asset].totalBorrows += amount;
 
         IERC20(asset).transfer(msg.sender, amount);
@@ -152,7 +164,7 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
         _accrueInterest(asset);
 
         IERC20(asset).transferFrom(msg.sender, address(this), amount);
-        reserves[asset].debtToken.burn(msg.sender, amount);
+        IDebtToken(reserves[asset].debtToken).burn(msg.sender, amount);
         reserves[asset].totalBorrows -= amount;
 
         emit Repay(msg.sender, asset, amount);
@@ -164,7 +176,6 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
         address debtAsset,
         uint256 repayAmount
     ) external nonReentrant onlyRole(LIQUIDATOR_ROLE) {
-        // Check if the position is liquidatable using the updated function
         if (
             !collateralManager.isLiquidatable(
                 user,
@@ -179,28 +190,21 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
 
         _accrueInterest(debtAsset);
 
-        // Transfer repayAmount from liquidator to pool
         IERC20(debtAsset).transferFrom(msg.sender, address(this), repayAmount);
 
-        // Burn debt from user
-        reserves[debtAsset].debtToken.burn(user, repayAmount);
+        IDebtToken(reserves[debtAsset].debtToken).burn(user, repayAmount);
         reserves[debtAsset].totalBorrows -= repayAmount;
 
-        // Seize collateral (applying 10% liquidation bonus)
         uint256 priceDebt = collateralManager.oracle().getPrice(debtAsset);
         uint256 priceColl = collateralManager.oracle().getPrice(
             collateralAsset
         );
 
-        // Liquidation formula: seizeAmount = repayAmount * (1 + liquidation bonus) * priceDebt / priceColl
         uint256 seizeAmount = ((repayAmount * priceDebt * 110) / 100) /
             priceColl;
 
-        // Burn collateral from user
-        reserves[collateralAsset].lToken.burn(user, seizeAmount);
-
-        // Mint collateral to liquidator
-        reserves[collateralAsset].lToken.mint(msg.sender, seizeAmount);
+        ILToken(reserves[collateralAsset].lToken).burn(user, seizeAmount);
+        ILToken(reserves[collateralAsset].lToken).mint(msg.sender, seizeAmount);
 
         emit Liquidation(
             msg.sender,
@@ -236,7 +240,6 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
         _unpause();
     }
 
-    // optional for atomic update to both at a time for during migration and protocol upgrade
     function setReserveTokens(
         address asset,
         address lToken,
@@ -246,8 +249,8 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
             revert Errors.ReserveNotInitialized();
         }
 
-        reserves[asset].lToken = LToken(lToken);
-        reserves[asset].debtToken = DebtToken(debtToken);
+        reserves[asset].lToken = lToken;
+        reserves[asset].debtToken = debtToken;
     }
 
     function setReserveLToken(
@@ -258,7 +261,7 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
             revert Errors.ReserveNotInitialized();
         }
 
-        reserves[asset].lToken = LToken(newLToken);
+        reserves[asset].lToken = newLToken;
     }
 
     function setReserveDebtToken(
@@ -269,6 +272,6 @@ contract LendingPool is AccessControl, ReentrancyGuard, Pausable {
             revert Errors.ReserveNotInitialized();
         }
 
-        reserves[asset].debtToken = DebtToken(newDebtToken);
+        reserves[asset].debtToken = newDebtToken;
     }
 }

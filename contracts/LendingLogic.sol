@@ -10,7 +10,10 @@ library LendingLogic {
      * @param totalDeposits Total supplied liquidity in the pool
      * @return utilization Utilization rate scaled to 1e18
      */
-    function calculateUtilization(uint256 totalBorrows, uint256 totalDeposits) internal pure returns (uint256) {
+    function calculateUtilization(
+        uint256 totalBorrows,
+        uint256 totalDeposits
+    ) internal pure returns (uint256) {
         // Avoid division by zero
         if (totalDeposits == 0) return 0;
 
